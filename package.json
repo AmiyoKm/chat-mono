@@ -1,4 +1,11 @@
 {
+  "name": "with-vite",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "turbo": "^2.8.10"
+  },
+  "packageManager": "bun@1.3.8",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -6,13 +13,6 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "devDependencies": {
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "turbo": "^2.8.10"
-  },
-  "name": "with-vite",
-  "packageManager": "bun@1.3.8",
   "workspaces": [
     "apps/*",
     "packages/*"
