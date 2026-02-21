@@ -1,5 +1,6 @@
 import Elysia, { status, t } from "elysia";
 import { authPlugin } from "../../plugins/auth.plugin";
+import { errorResponse } from "../../utils/schema";
 import { ConversationModel } from "./conversation.model";
 import { ConversationService } from "./conversation.service";
 
@@ -41,7 +42,7 @@ export const conversation = new Elysia({ prefix: "/conversations" })
       body: ConversationModel.createGroupBody,
       response: {
         200: ConversationModel.createGroupResponse,
-        400: ConversationModel.errorResponse,
+        400: errorResponse,
       },
     },
   )
@@ -77,7 +78,7 @@ export const conversation = new Elysia({ prefix: "/conversations" })
       body: ConversationModel.createDmBody,
       response: {
         200: ConversationModel.createDmResponse,
-        400: ConversationModel.errorResponse,
+        400: errorResponse,
       },
     },
   )
@@ -124,7 +125,6 @@ export const conversation = new Elysia({ prefix: "/conversations" })
               width: attachment.width,
               height: attachment.height,
             })),
-            senderId: msg.senderId,
             sender: {
               id: msg.sender.id,
               username: msg.sender.username,
@@ -149,7 +149,7 @@ export const conversation = new Elysia({ prefix: "/conversations" })
       query: ConversationModel.getMessagesQuery,
       response: {
         200: ConversationModel.getMessagesOfConversation,
-        403: ConversationModel.errorResponse,
+        403: errorResponse,
       },
     },
   );

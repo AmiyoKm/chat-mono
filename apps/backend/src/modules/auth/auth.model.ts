@@ -1,18 +1,16 @@
 import { t, type UnwrapSchema } from "elysia";
+import { baseResponse } from "../../utils/schema";
 
 export const AuthModel = {
   signInBody: t.Object({
     email: t.String(),
     password: t.String(),
   }),
-  signInResponse: t.Object({
-    message: t.String(),
+  signInResponse: baseResponse({
+    message: t.Literal("User signed in successfully"),
     data: t.Object({
       username: t.String(),
     }),
-  }),
-  signInFailed: t.Object({
-    message: t.Literal("Invalid email or password"),
   }),
 
   signUpBody: t.Object({
@@ -20,30 +18,11 @@ export const AuthModel = {
     email: t.String(),
     password: t.String(),
   }),
-  signUpResponse: t.Object({
+  signUpResponse: baseResponse({
     message: t.Literal("User created successfully"),
     data: t.Object({
       username: t.String(),
     }),
-  }),
-  signUpFailed: t.Object({
-    message: t.String(),
-  }),
-
-  unauthorizedResponse: t.Object({
-    message: t.String(),
-  }),
-
-  notFoundResponse: t.Object({
-    message: t.Literal("User not found"),
-  }),
-
-  signOutResponse: t.Object({
-    message: t.Literal("User signed out successfully"),
-  }),
-
-  refreshTokenResponse: t.Object({
-    message: t.Literal("Token refreshed successfully"),
   }),
 } as const;
 

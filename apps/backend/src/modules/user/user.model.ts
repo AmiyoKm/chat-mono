@@ -1,7 +1,8 @@
 import { t, type UnwrapSchema } from "elysia";
+import { baseResponse } from "../../utils/schema";
 
 export const UserModel = {
-  meResponse: t.Object({
+  meResponse: baseResponse({
     message: t.String(),
     data: t.Object({
       username: t.String(),

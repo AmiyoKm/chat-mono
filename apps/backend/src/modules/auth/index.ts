@@ -1,38 +1,18 @@
-import Elysia from "elysia";
-
-import { status } from "elysia";
+import Elysia, { status } from "elysia";
 import { accessJwt, refreshJwt } from "../../utils/jwt";
+import { errorResponse, successResponse } from "../../utils/schema";
 import { AuthModel } from "./auth.model";
 import { AuthService } from "./auth.service";
-
-class AuthError extends Error {
-  constructor(public message: string) {
-    super(message);
-  }
-}
 
 export const auth = new Elysia({ prefix: "/auth" })
   .use(accessJwt)
   .use(refreshJwt)
-  .error({
-    AuthError,
-  })
-  .onError(({ status, error, code }) => {
-    if (code === "AuthError") {
-      return status(400, {
-        message: error.message,
-      });
-    }
-    return status(500, {
-      message: "Internal server error",
-    });
-  })
   .post(
     "sign-up",
     async ({ body, accessJwt, refreshJwt, cookie: { access, refresh } }) => {
       const userExists = await AuthService.getUserByEmail(body.email);
       if (userExists) {
-        throw new AuthError("User already exists");
+        return status(400, { message: "User already exists" });
       }
 
       const user = await AuthService.createUser(body);
@@ -65,7 +45,7 @@ export const auth = new Elysia({ prefix: "/auth" })
       body: AuthModel.signUpBody,
       response: {
         201: AuthModel.signUpResponse,
-        400: AuthModel.signUpFailed,
+        400: errorResponse,
       },
     },
   )
@@ -106,9 +86,9 @@ export const auth = new Elysia({ prefix: "/auth" })
       body: AuthModel.signInBody,
       response: {
         200: AuthModel.signInResponse,
-        400: AuthModel.signInFailed,
-        404: AuthModel.notFoundResponse,
-        401: AuthModel.unauthorizedResponse,
+        400: errorResponse,
+        404: errorResponse,
+        401: errorResponse,
       },
     },
   )
@@ -121,7 +101,7 @@ export const auth = new Elysia({ prefix: "/auth" })
     },
     {
       response: {
-        200: AuthModel.signOutResponse,
+        200: successResponse,
       },
     },
   )
@@ -148,8 +128,8 @@ export const auth = new Elysia({ prefix: "/auth" })
     },
     {
       response: {
-        200: AuthModel.refreshTokenResponse,
-        401: AuthModel.unauthorizedResponse,
+        200: successResponse,
+        401: errorResponse,
       },
     },
   );

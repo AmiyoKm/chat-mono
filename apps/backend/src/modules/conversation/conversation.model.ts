@@ -1,12 +1,13 @@
 import { ConversationType } from "db";
 import { t, UnwrapSchema } from "elysia";
+import { baseResponse } from "../../utils/schema";
 
 export const ConversationModel = {
   createDmBody: t.Object({
     participantId: t.Number(),
   }),
 
-  createDmResponse: t.Object({
+  createDmResponse: baseResponse({
     message: t.Literal("Conversation created successfully"),
     data: t.Object({
       id: t.Number(),
@@ -19,16 +20,12 @@ export const ConversationModel = {
     }),
   }),
 
-  createDmFailed: t.Object({
-    message: t.String(),
-  }),
-
   createGroupBody: t.Object({
     name: t.String(),
     avatar: t.Optional(t.String()),
     participantIds: t.Array(t.Number()),
   }),
-  createGroupResponse: t.Object({
+  createGroupResponse: baseResponse({
     message: t.Literal("Conversation created successfully"),
     data: t.Object({
       id: t.Number(),
@@ -40,15 +37,8 @@ export const ConversationModel = {
       updatedAt: t.String(),
     }),
   }),
-  createGroupFailed: t.Object({
-    message: t.String(),
-  }),
 
-  errorResponse: t.Object({
-    message: t.String(),
-  }),
-  
-  getConversationsResponse: t.Object({
+  getConversationsResponse: baseResponse({
     message: t.Literal("Conversations retrieved successfully"),
     data: t.Object({
       conversations: t.Array(
@@ -69,17 +59,8 @@ export const ConversationModel = {
       }),
     }),
   }),
-  getConversationResponse: t.Object({
-    message: t.Literal("Conversation retrieved successfully"),
-    data: t.Object({
-      id: t.Number(),
-      name: t.Optional(t.String()),
-      avatar: t.Optional(t.String()),
-      createdBy: t.Number(),
-    }),
-  }),
 
-  getMessagesOfConversation: t.Object({
+  getMessagesOfConversation: baseResponse({
     message: t.Literal("Messages retrieved successfully"),
     data: t.Object({
       messages: t.Array(
@@ -100,7 +81,6 @@ export const ConversationModel = {
               }),
             ),
           ),
-          senderId: t.Number(),
           sender: t.Object({
             id: t.Number(),
             username: t.String(),
