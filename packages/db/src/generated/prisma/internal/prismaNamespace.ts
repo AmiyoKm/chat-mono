@@ -1134,6 +1134,7 @@ export const ConversationScalarFieldEnum = {
   id: 'id',
   name: 'name',
   avatar: 'avatar',
+  type: 'type',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1297,6 +1298,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ConversationType'
+ */
+export type EnumConversationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConversationType'>
+    
+
+
+/**
+ * Reference to a field of type 'ConversationType[]'
+ */
+export type ListEnumConversationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConversationType[]'>
     
 
 

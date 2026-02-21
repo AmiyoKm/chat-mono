@@ -22,6 +22,7 @@
         "@elysiajs/cors": "^1.4.1",
         "@elysiajs/jwt": "^1.4.0",
         "@elysiajs/openapi": "^1.4.14",
+        "@grotto/logysia": "^0.1.6",
         "db": "workspace:*",
         "elysia": "latest",
       },
@@ -136,6 +137,8 @@
     "@floating-ui/utils": ["@floating-ui/utils@0.2.10", "", {}, "sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ=="],
 
     "@floating-ui/vue": ["@floating-ui/vue@1.1.10", "", { "dependencies": { "@floating-ui/dom": "^1.7.5", "@floating-ui/utils": "^0.2.10", "vue-demi": ">=0.13.0" } }, "sha512-vdf8f6rHnFPPLRsmL4p12wYl+Ux4mOJOkjzKEMYVnwdf7UFdvBtHlLvQyx8iKG5vhPRbDRgZxdtpmyigDPjzYg=="],
+
+    "@grotto/logysia": ["@grotto/logysia@0.1.6", "", { "dependencies": { "picocolors": "^1.1.1" }, "peerDependencies": { "elysia": "^1.1.25" } }, "sha512-jL7Jl9MYoyFs+MItSNDOAdnIRpHPG+1RbHDD6PIHzjgdl6dJMrNqinK4obQEa5wXQJPbnk6JsqclUsvfEEVAnw=="],
 
     "@hono/node-server": ["@hono/node-server@1.19.9", "", { "peerDependencies": { "hono": "^4" } }, "sha512-vHL6w3ecZsky+8P5MD+eFfaGTyCeOHUIFYMGpQGbrBTSmNNoxv0if69rEZ5giu36weC5saFuznL411gRX7bJDw=="],
 

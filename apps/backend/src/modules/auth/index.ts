@@ -51,7 +51,7 @@ export const auth = new Elysia({ prefix: "/auth" })
         value: refreshToken,
         httpOnly: true,
         maxAge: 7 * 86400,
-        path: "/auth/refresh",
+        path: "/api/auth/refresh",
       });
 
       return {
@@ -92,7 +92,7 @@ export const auth = new Elysia({ prefix: "/auth" })
         value: refreshToken,
         httpOnly: true,
         maxAge: 7 * 86400,
-        path: "/auth/refresh",
+        path: "/api/auth/refresh",
       });
 
       return {

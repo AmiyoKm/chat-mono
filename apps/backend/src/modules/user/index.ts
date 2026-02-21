@@ -1,5 +1,5 @@
 import Elysia from "elysia";
-import { authPlugin } from "../auth/auth.plugin";
+import { authPlugin } from "../../plugins/auth.plugin";
 import { UserModel } from "./user.model";
 
 export const user = new Elysia({ prefix: "/users" }).use(authPlugin).get(

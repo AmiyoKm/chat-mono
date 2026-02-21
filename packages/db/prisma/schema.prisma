@@ -33,6 +33,7 @@ model Conversation {
   id        Int      @id @default(autoincrement())
   name      String?  // Null for DMs, set for groups
   avatar    String?
+  type      ConversationType @default(DIRECT)
   createdBy Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -153,6 +154,11 @@ model UserOnlineStatus {
 // ====================
 // Enums
 // ====================
+
+enum ConversationType {
+  DIRECT
+  GROUP
+}
 
 enum ParticipantRole {
   ADMIN

@@ -9,6 +9,7 @@
     "@elysiajs/cors": "^1.4.1",
     "@elysiajs/jwt": "^1.4.0",
     "@elysiajs/openapi": "^1.4.14",
+    "@grotto/logysia": "^0.1.6",
     "db": "workspace:*",
     "elysia": "latest"
   },

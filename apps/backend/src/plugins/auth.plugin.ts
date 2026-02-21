@@ -1,6 +1,6 @@
 import Elysia, { status } from "elysia";
-import { accessJwt } from "../../utils/jwt";
-import { AuthService } from "./auth.service";
+import { AuthService } from "../modules/auth/auth.service";
+import { accessJwt } from "../utils/jwt";
 
 export const authPlugin = new Elysia({ name: "auth" })
   .use(accessJwt)

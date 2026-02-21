@@ -95,6 +95,7 @@ export const ConversationScalarFieldEnum = {
   id: 'id',
   name: 'name',
   avatar: 'avatar',
+  type: 'type',
   createdBy: 'createdBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

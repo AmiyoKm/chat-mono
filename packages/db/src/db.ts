@@ -7,3 +7,8 @@ const adapter = new PrismaNeon({
 });
 
 export const prisma = new PrismaClient({ adapter });
+
+export * from "./generated/prisma/enums";
+
+export * from "./generated/prisma/client";
+
