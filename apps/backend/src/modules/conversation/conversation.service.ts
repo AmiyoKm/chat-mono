@@ -2,6 +2,25 @@ import { ConversationType, ParticipantRole, prisma } from "db";
 import { TConversationModel } from "./conversation.model";
 
 export abstract class ConversationService {
+  static isParticipant = async ({
+    conversationId,
+    userId,
+  }: {
+    conversationId: number;
+    userId: number;
+  }) => {
+    const participant = await prisma.conversationParticipant.findUnique({
+      where: {
+        conversationId_userId: {
+          conversationId,
+          userId,
+        },
+      },
+    });
+
+    return !!participant;
+  };
+
   static createGroup = async ({
     name,
     avatar,
@@ -97,25 +116,16 @@ export abstract class ConversationService {
 
   static getMessages = async ({
     conversationId,
-    userId,
     page,
     limit,
   }: {
     conversationId: number;
-    userId: number;
     page: number;
     limit: number;
   }) => {
     const messages = await prisma.message.findMany({
       where: {
         conversationId,
-        conversation: {
-          participants: {
-            some: {
-              userId,
-            },
-          },
-        },
       },
       include: {
         sender: {
@@ -136,23 +146,15 @@ export abstract class ConversationService {
 
     return messages;
   };
+
   static countMessages = async ({
     conversationId,
-    userId,
   }: {
     conversationId: number;
-    userId: number;
   }) => {
     const count = await prisma.message.count({
       where: {
         conversationId,
-        conversation: {
-          participants: {
-            some: {
-              userId,
-            },
-          },
-        },
       },
     });
 

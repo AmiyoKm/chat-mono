@@ -87,16 +87,25 @@ export const conversation = new Elysia({ prefix: "/conversations" })
       const page = Math.max(1, query.page || 1);
       const limit = Math.min(100, Math.max(1, query.limit || 20));
 
-      const messages = await ConversationService.getMessages({
+      const isParticipant = await ConversationService.isParticipant({
         conversationId: params.id,
         userId: user.id,
+      });
+
+      if (!isParticipant) {
+        return status(403, {
+          message: "You are not a participant of this conversation",
+        });
+      }
+
+      const messages = await ConversationService.getMessages({
+        conversationId: params.id,
         page,
         limit,
       });
 
       const total = await ConversationService.countMessages({
         conversationId: params.id,
-        userId: user.id,
       });
 
       return {
@@ -121,8 +130,8 @@ export const conversation = new Elysia({ prefix: "/conversations" })
               username: msg.sender.username,
               avatar: msg.sender.avatar ?? undefined,
             },
-            createdAt: msg.createdAt,
-            updatedAt: msg.updatedAt,
+            createdAt: msg.createdAt.toISOString(),
+            updatedAt: msg.updatedAt.toISOString(),
           })),
           pagination: {
             total,
@@ -140,6 +149,7 @@ export const conversation = new Elysia({ prefix: "/conversations" })
       query: ConversationModel.getMessagesQuery,
       response: {
         200: ConversationModel.getMessagesOfConversation,
+        403: ConversationModel.errorResponse,
       },
     },
   );

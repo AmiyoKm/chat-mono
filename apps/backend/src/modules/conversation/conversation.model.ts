@@ -47,6 +47,7 @@ export const ConversationModel = {
   errorResponse: t.Object({
     message: t.String(),
   }),
+  
   getConversationsResponse: t.Object({
     message: t.Literal("Conversations retrieved successfully"),
     data: t.Object({
@@ -56,8 +57,8 @@ export const ConversationModel = {
           name: t.Optional(t.String()),
           avatar: t.Optional(t.String()),
           createdBy: t.Number(),
-          createdAt: t.Date(),
-          updatedAt: t.Date(),
+          createdAt: t.String(),
+          updatedAt: t.String(),
         }),
       ),
       pagination: t.Object({
@@ -105,8 +106,8 @@ export const ConversationModel = {
             username: t.String(),
             avatar: t.Optional(t.String()),
           }),
-          createdAt: t.Date(),
-          updatedAt: t.Date(),
+          createdAt: t.String(),
+          updatedAt: t.String(),
         }),
       ),
       pagination: t.Object({
