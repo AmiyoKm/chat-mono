@@ -9,4 +9,12 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.ts'
+export type * from './models/Conversation.ts'
+export type * from './models/ConversationParticipant.ts'
+export type * from './models/Message.ts'
+export type * from './models/MessageAttachment.ts'
+export type * from './models/MessageReadStatus.ts'
+export type * from './models/Call.ts'
+export type * from './models/CallParticipant.ts'
+export type * from './models/UserOnlineStatus.ts'
 export type * from './commonInputTypes.ts'

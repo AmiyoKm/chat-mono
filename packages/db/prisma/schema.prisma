@@ -7,11 +7,185 @@ datasource db {
   provider = "postgresql"
 }
 
+// ====================
+// Core Models
+// ====================
+
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  username  String
+  username  String   @unique
   password  String
+  avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  participations        ConversationParticipant[]
+  messages              Message[]
+  readStatuses          MessageReadStatus[]
+  onlineStatus          UserOnlineStatus?
+  initiatedCalls        Call[]                    @relation("CallInitiator")
+  callParticipations    CallParticipant[]
+  createdConversations  Conversation[]            @relation("ConversationCreator")
+}
+
+model Conversation {
+  id        Int      @id @default(autoincrement())
+  name      String?  // Null for DMs, set for groups
+  avatar    String?
+  createdBy Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creator      User                      @relation("ConversationCreator", fields: [createdBy], references: [id])
+  participants ConversationParticipant[]
+  messages     Message[]
+  calls        Call[]
+}
+
+model ConversationParticipant {
+  id             Int             @id @default(autoincrement())
+  conversationId Int
+  userId         Int
+  role           ParticipantRole @default(MEMBER)
+  joinedAt       DateTime        @default(now())
+  leftAt         DateTime?       // Soft delete - preserves chat history
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+
+  @@unique([conversationId, userId])
+}
+
+// ====================
+// Messages & Content
+// ====================
+
+model Message {
+  id             Int       @id @default(autoincrement())
+  conversationId Int
+  senderId       Int
+  content        String?   // Nullable for media-only messages
+  replyToId      Int?      // Threaded replies
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  conversation Conversation       @relation(fields: [conversationId], references: [id])
+  sender       User               @relation(fields: [senderId], references: [id])
+  replyTo      Message?           @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies      Message[]          @relation("MessageReplies")
+  attachments  MessageAttachment[]
+  readStatuses MessageReadStatus[]
+}
+
+model MessageAttachment {
+  id        Int            @id @default(autoincrement())
+  messageId Int
+  type      AttachmentType
+  filename  String
+  url       String         // Storage URL (S3, Cloudinary, etc.)
+  size      Int            // File size in bytes
+  mimeType  String         // image/jpeg, application/pdf, etc.
+  width     Int?           // For images
+  height    Int?           // For images
+
+  message Message @relation(fields: [messageId], references: [id])
+}
+
+model MessageReadStatus {
+  id        Int       @id @default(autoincrement())
+  messageId Int
+  userId    Int
+  status    ReadStatus @default(SENT)
+  readAt    DateTime?
+
+  message Message @relation(fields: [messageId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([messageId, userId])
+}
+
+// ====================
+// Audio Calls
+// ====================
+
+model Call {
+  id             Int        @id @default(autoincrement())
+  conversationId Int
+  initiatedBy    Int
+  status         CallStatus @default(INITIATED)
+  startedAt      DateTime   @default(now())
+  endedAt        DateTime?
+
+  conversation Conversation      @relation(fields: [conversationId], references: [id])
+  initiator    User              @relation("CallInitiator", fields: [initiatedBy], references: [id])
+  participants CallParticipant[]
+}
+
+model CallParticipant {
+  id        Int                      @id @default(autoincrement())
+  callId    Int
+  userId    Int
+  status    CallParticipantStatus    @default(INVITED)
+  joinedAt  DateTime?
+  leftAt    DateTime?
+  isMuted   Boolean                  @default(false)
+
+  call Call @relation(fields: [callId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([callId, userId])
+}
+
+// ====================
+// Real-time Features
+// ====================
+
+model UserOnlineStatus {
+  id       Int          @id @default(autoincrement())
+  userId   Int          @unique
+  status   OnlineStatus @default(OFFLINE)
+  lastSeen DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ====================
+// Enums
+// ====================
+
+enum ParticipantRole {
+  ADMIN
+  MEMBER
+}
+
+enum AttachmentType {
+  IMAGE
+  FILE
+}
+
+enum ReadStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+enum OnlineStatus {
+  ONLINE
+  AWAY
+  OFFLINE
+}
+
+enum CallStatus {
+  INITIATED
+  ONGOING
+  ENDED
+  MISSED
+}
+
+enum CallParticipantStatus {
+  INVITED
+  JOINED
+  DECLINED
+  LEFT
 }

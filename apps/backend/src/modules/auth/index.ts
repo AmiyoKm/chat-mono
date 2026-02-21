@@ -1,8 +1,7 @@
 import Elysia from "elysia";
 
-import jwt from "@elysiajs/jwt";
 import { status } from "elysia";
-import { acessJwt, refreshJwt } from "../../utils/jwt";
+import { accessJwt, refreshJwt } from "../../utils/jwt";
 import { AuthModel } from "./auth.model";
 import { AuthService } from "./auth.service";
 
@@ -13,8 +12,8 @@ class AuthError extends Error {
 }
 
 export const auth = new Elysia({ prefix: "/auth" })
-  .use(jwt(acessJwt))
-  .use(jwt(refreshJwt))
+  .use(accessJwt)
+  .use(refreshJwt)
   .error({
     AuthError,
   })

@@ -9,7 +9,55 @@
 * 🟢 You can import this file directly.
 */
 
+export const ParticipantRole = {
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+} as const
+
+export type ParticipantRole = (typeof ParticipantRole)[keyof typeof ParticipantRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const AttachmentType = {
+  IMAGE: 'IMAGE',
+  FILE: 'FILE'
+} as const
+
+export type AttachmentType = (typeof AttachmentType)[keyof typeof AttachmentType]
+
+
+export const ReadStatus = {
+  SENT: 'SENT',
+  DELIVERED: 'DELIVERED',
+  READ: 'READ'
+} as const
+
+export type ReadStatus = (typeof ReadStatus)[keyof typeof ReadStatus]
+
+
+export const OnlineStatus = {
+  ONLINE: 'ONLINE',
+  AWAY: 'AWAY',
+  OFFLINE: 'OFFLINE'
+} as const
+
+export type OnlineStatus = (typeof OnlineStatus)[keyof typeof OnlineStatus]
+
+
+export const CallStatus = {
+  INITIATED: 'INITIATED',
+  ONGOING: 'ONGOING',
+  ENDED: 'ENDED',
+  MISSED: 'MISSED'
+} as const
+
+export type CallStatus = (typeof CallStatus)[keyof typeof CallStatus]
+
+
+export const CallParticipantStatus = {
+  INVITED: 'INVITED',
+  JOINED: 'JOINED',
+  DECLINED: 'DECLINED',
+  LEFT: 'LEFT'
+} as const
+
+export type CallParticipantStatus = (typeof CallParticipantStatus)[keyof typeof CallParticipantStatus]

@@ -6,6 +6,7 @@ export const UserModel = {
     data: t.Object({
       username: t.String(),
       email: t.String(),
+      avatar: t.Union([t.String(), t.Null()]),
     }),
   }),
 } as const;
