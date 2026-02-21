@@ -1,4 +1,4 @@
-import Elysia, { status } from "elysia";
+import Elysia, { status, t } from "elysia";
 import { authPlugin } from "../../plugins/auth.plugin";
 import { ConversationModel } from "./conversation.model";
 import { ConversationService } from "./conversation.service";
@@ -20,16 +20,126 @@ export const conversation = new Elysia({ prefix: "/conversations" })
         });
       }
 
+      if (new Set(body.participantIds).size !== body.participantIds.length) {
+        return status(400, {
+          message: "Duplicate participant IDs are not allowed",
+        });
+      }
+
       const conversation = await ConversationService.createGroup({
         creatorId: user.id,
         name: body.name,
         avatar: body.avatar,
         participantIds: body.participantIds,
       });
-      return conversation;
+      return {
+        message: "Conversation created successfully",
+        data: conversation,
+      };
     },
     {
       body: ConversationModel.createGroupBody,
-      200: ConversationModel.createGroupResponse,
+      response: {
+        200: ConversationModel.createGroupResponse,
+        400: ConversationModel.errorResponse,
+      },
+    },
+  )
+  .post(
+    "/dm",
+    async ({ user, body }) => {
+      if (body.participantId === user.id) {
+        return status(400, {
+          message: "You cannot create a conversation with yourself",
+        });
+      }
+
+      const existingConversation = await ConversationService.existingDm({
+        creatorId: user.id,
+        participantId: body.participantId,
+      });
+      if (existingConversation) {
+        return status(400, {
+          message: "Conversation already exists",
+        });
+      }
+
+      const conversation = await ConversationService.createDm({
+        creatorId: user.id,
+        participantId: body.participantId,
+      });
+      return {
+        message: "Conversation created successfully",
+        data: conversation,
+      };
+    },
+    {
+      body: ConversationModel.createDmBody,
+      response: {
+        200: ConversationModel.createDmResponse,
+        400: ConversationModel.errorResponse,
+      },
+    },
+  )
+  .get(
+    "/:id/messages",
+    async ({ user, params, query }) => {
+      const page = Math.max(1, query.page || 1);
+      const limit = Math.min(100, Math.max(1, query.limit || 20));
+
+      const messages = await ConversationService.getMessages({
+        conversationId: params.id,
+        userId: user.id,
+        page,
+        limit,
+      });
+
+      const total = await ConversationService.countMessages({
+        conversationId: params.id,
+        userId: user.id,
+      });
+
+      return {
+        message: "Messages retrieved successfully",
+        data: {
+          messages: messages.map((msg) => ({
+            id: msg.id,
+            content: msg.content,
+            attachments: msg.attachments.map((attachment) => ({
+              id: attachment.id,
+              type: attachment.type,
+              filename: attachment.filename,
+              url: attachment.url,
+              size: attachment.size,
+              mimeType: attachment.mimeType,
+              width: attachment.width,
+              height: attachment.height,
+            })),
+            senderId: msg.senderId,
+            sender: {
+              id: msg.sender.id,
+              username: msg.sender.username,
+              avatar: msg.sender.avatar ?? undefined,
+            },
+            createdAt: msg.createdAt,
+            updatedAt: msg.updatedAt,
+          })),
+          pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+          },
+        },
+      };
+    },
+    {
+      params: t.Object({
+        id: t.Numeric(),
+      }),
+      query: ConversationModel.getMessagesQuery,
+      response: {
+        200: ConversationModel.getMessagesOfConversation,
+      },
     },
   );

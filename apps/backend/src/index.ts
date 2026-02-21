@@ -4,6 +4,7 @@ import { logger } from "@grotto/logysia";
 import { Elysia } from "elysia";
 import { auth } from "./modules/auth";
 import { conversation } from "./modules/conversation";
+import { message } from "./modules/message";
 import { user } from "./modules/user";
 
 const app = new Elysia({ prefix: "/api" })
@@ -13,6 +14,7 @@ const app = new Elysia({ prefix: "/api" })
   .use(auth)
   .use(user)
   .use(conversation)
+  .use(message)
   .get("/", () => "Hello Elysia")
   .listen(3000);
 
