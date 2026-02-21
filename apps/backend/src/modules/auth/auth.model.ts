@@ -1,13 +1,15 @@
 import { t, type UnwrapSchema } from "elysia";
 
-const AuthModel = {
+export const AuthModel = {
   signInBody: t.Object({
     email: t.String(),
     password: t.String(),
   }),
   signInResponse: t.Object({
-    username: t.String(),
-    token: t.String(),
+    message: t.String(),
+    data: t.Object({
+      username: t.String(),
+    }),
   }),
   signInFailed: t.Object({
     message: t.Literal("Invalid email or password"),
@@ -19,11 +21,29 @@ const AuthModel = {
     password: t.String(),
   }),
   signUpResponse: t.Object({
-    username: t.String(),
-    token: t.String(),
+    message: t.Literal("User created successfully"),
+    data: t.Object({
+      username: t.String(),
+    }),
   }),
   signUpFailed: t.Object({
     message: t.String(),
+  }),
+
+  unauthorizedResponse: t.Object({
+    message: t.String(),
+  }),
+
+  notFoundResponse: t.Object({
+    message: t.Literal("User not found"),
+  }),
+
+  signOutResponse: t.Object({
+    message: t.Literal("User signed out successfully"),
+  }),
+
+  refreshTokenResponse: t.Object({
+    message: t.Literal("Token refreshed successfully"),
   }),
 } as const;
 

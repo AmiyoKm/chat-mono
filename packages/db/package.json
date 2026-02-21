@@ -14,7 +14,7 @@
     "migrate:dev": "prisma migrate dev --name"
   },
   "exports": {
-    "./db": "./src"
+    ".": "./src/db.ts"
   },
   "dependencies": {
     "@prisma/adapter-neon": "^7.4.0",
