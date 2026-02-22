@@ -10,8 +10,12 @@
     "@elysiajs/jwt": "^1.4.0",
     "@elysiajs/openapi": "^1.4.14",
     "@grotto/logysia": "^0.1.6",
+    "@types/multer": "^2.0.0",
+    "cloudinary": "^2.9.0",
     "db": "workspace:*",
-    "elysia": "latest"
+    "dotenv": "^17.3.1",
+    "elysia": "latest",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
     "bun-types": "latest"
