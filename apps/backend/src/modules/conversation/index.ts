@@ -33,15 +33,23 @@ export const conversation = new Elysia({ prefix: "/conversations" })
         avatar: body.avatar,
         participantIds: body.participantIds,
       });
-      return {
-        message: "Conversation created successfully",
-        data: conversation,
-      };
+      return status(201, {
+        message: "Group Conversation created successfully",
+        data: {
+          id: conversation.id,
+          name: conversation.name,
+          avatar: conversation.avatar,
+          type: conversation.type,
+          createdBy: conversation.createdBy,
+          createdAt: conversation.createdAt.toISOString(),
+          updatedAt: conversation.updatedAt.toISOString(),
+        },
+      });
     },
     {
       body: ConversationModel.createGroupBody,
       response: {
-        200: ConversationModel.createGroupResponse,
+        201: ConversationModel.createGroupResponse,
         400: errorResponse,
       },
     },
@@ -70,14 +78,22 @@ export const conversation = new Elysia({ prefix: "/conversations" })
         participantId: body.participantId,
       });
       return {
-        message: "Conversation created successfully",
-        data: conversation,
+        message: "Direct Conversation created successfully",
+        data: {
+          id: conversation.id,
+          name: conversation.name,
+          avatar: conversation.avatar,
+          type: conversation.type,
+          createdBy: conversation.createdBy,
+          createdAt: conversation.createdAt.toISOString(),
+          updatedAt: conversation.updatedAt.toISOString(),
+        },
       };
     },
     {
       body: ConversationModel.createDmBody,
       response: {
-        200: ConversationModel.createDmResponse,
+        201: ConversationModel.createDmResponse,
         400: errorResponse,
       },
     },

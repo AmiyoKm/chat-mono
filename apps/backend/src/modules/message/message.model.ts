@@ -6,6 +6,7 @@ export const MessageModel = {
     message: t.Nullable(t.String()),
     attachments: t.Array(
       t.Object({
+        type: t.Union([t.Literal("IMAGE"), t.Literal("FILE")]),
         url: t.String(),
         filename: t.String(),
         size: t.Number(),

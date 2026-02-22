@@ -8,11 +8,11 @@ export const ConversationModel = {
   }),
 
   createDmResponse: baseResponse({
-    message: t.Literal("Conversation created successfully"),
+    message: t.Literal("Direct Conversation created successfully"),
     data: t.Object({
       id: t.Number(),
-      name: t.Optional(t.String()),
-      avatar: t.Optional(t.String()),
+      name: t.Union([t.String(), t.Null()]),
+      avatar: t.Union([t.String(), t.Null()]),
       type: t.Literal(ConversationType.DIRECT),
       createdBy: t.Number(),
       createdAt: t.String(),
@@ -26,11 +26,11 @@ export const ConversationModel = {
     participantIds: t.Array(t.Number()),
   }),
   createGroupResponse: baseResponse({
-    message: t.Literal("Conversation created successfully"),
+    message: t.Literal("Group Conversation created successfully"),
     data: t.Object({
       id: t.Number(),
       name: t.String(),
-      avatar: t.Optional(t.String()),
+      avatar: t.Union([t.String(), t.Null()]),
       type: t.Literal(ConversationType.GROUP),
       createdBy: t.Number(),
       createdAt: t.String(),
